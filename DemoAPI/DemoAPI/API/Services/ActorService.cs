@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DemoApp.Models;
 using DemoApp.Repository;
 
@@ -13,9 +14,37 @@ namespace DemoApp.Services
             _actorRepository = actorRepository;
         }
 
-        public IEnumerable<Actor> GetAll()
+        public void Create(Actor actor)
         {
-            return _actorRepository.GetAll();
+            if (actor == null)
+                throw new ArgumentNullException();
+            if (
+                string.IsNullOrWhiteSpace(actor.Name) ||
+                string.IsNullOrWhiteSpace(actor.Bio) ||
+                string.IsNullOrWhiteSpace(actor.Gender)
+                )
+                throw new ArgumentException();
+            _actorRepository.Create(actor);
+        }
+
+        public void Delete(int id)
+        {
+            _actorRepository.Delete(id);
+        }
+
+        public IList<Actor> Get()
+        {
+            return _actorRepository.Get();
+        }
+
+        public Actor Get(int id)
+        {
+            return _actorRepository.Get(id);
+        }
+
+        public void Update(Actor actor)
+        {
+            _actorRepository.Update(actor);
         }
     }
 }

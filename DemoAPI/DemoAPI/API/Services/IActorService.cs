@@ -5,6 +5,10 @@ namespace DemoApp.Services
 {
     public interface IActorService
     {
-        public IEnumerable<Actor> GetAll();
+        public IList<Actor> Get();
+        public Actor Get(int id);
+        public void Create(Actor actor);
+        public void Update(Actor actor);
+        public void Delete(int id);
     }
 }

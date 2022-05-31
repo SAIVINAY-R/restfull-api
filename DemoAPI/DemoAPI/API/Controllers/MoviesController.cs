@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DemoApp.Models;
+using DemoApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -6,42 +8,84 @@ namespace DemoApp.Controllers
     [Route("[controller]")]
     public class MoviesController : Controller
     {
+        private readonly IMovieService _movieService;
+
+        public MoviesController(IMovieService movieService)
+        {
+            _movieService = movieService;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(new
+            try
             {
-                id = 1,
-                name = "Movie 1"
-            });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int ID)
-        {
-            return Ok(new
+                return Ok(_movieService.Get());
+            }
+            catch (System.Exception)
             {
-                id = ID,
-                name = "Movie " + ID
-            });
+
+                return BadRequest();
+            }
         }
 
-        [HttpPost]
-        public IActionResult Add()
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
         {
-            return Created("~/movies/", new { id = 1, name = "Movie 1" });
+            try
+            {
+                return Ok(_movieService.Get(id));
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int ID)
+        [HttpPost("")]
+        public IActionResult Add(Movie movie)
         {
-            return Ok(new { id = ID, name = "Updated Movie " + ID });
+            try
+            {
+                _movieService.Create(movie);
+                return Created("~/actors/" + movie.Id, movie);
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int ID)
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, Movie movie)
         {
-            return Ok(new { id = ID, name = "Movie " + ID });
+            movie.Id = id;
+            try
+            {
+                _movieService.Update(movie);
+                return Ok(_movieService.Get(movie.Id));
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _movieService.Delete(id);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DemoApp.Models;
+using DemoApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -6,42 +8,86 @@ namespace DemoApp.Controllers
     [Route("movies/{movieId}/[controller]")]
     public class ReviewsController : Controller
     {
+        private readonly IReviewService _reviewService;
+
+        public ReviewsController(IReviewService reviewService)
+        {
+            _reviewService = reviewService;
+        }
+
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromRoute]int movieId)
         {
-            return Ok(new
+            try
+             {
+                return Ok(_reviewService.Get(movieId));
+            }
+            catch (System.Exception)
             {
-                id = 1,
-                name = "Review 1"
-            });
+
+                return NotFound(); 
+            }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int ID)
+        [HttpGet("{reviewId:int}")]
+        public IActionResult Get([FromRoute]int movieId, int reviewId)
         {
-            return Ok(new
+            try
             {
-                id = ID,
-                name = "Review " + ID
-            });
+                return Ok(_reviewService.Get(movieId, reviewId));
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
 
-        [HttpPost]
-        public IActionResult Add()
+        [HttpPost("")]
+        public IActionResult Add([FromRoute]int movieID,Review review)
         {
-            return Created("~/movies/{movieId}/reviews/", new { id = 1, name = "review 1" });
+            review.MovieId = movieID;
+            try
+            {
+                _reviewService.Create(review);
+                return Created("~/reviews/" + review.Id, review);
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int ID)
+        [HttpPut("{reviewId:int}")]
+        public IActionResult Update([FromRoute] int movieId, [FromRoute] int reviewId, Review review)
         {
-            return Ok(new { id = ID, name = "Updated Review " + ID });
+            review.MovieId = movieId;
+            review.Id = reviewId;
+            try
+            {
+                _reviewService.Update(review);
+                return Ok(_reviewService.Get(review.MovieId,review.Id));
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int ID)
+        [HttpDelete("{reviewId:int}")]
+        public IActionResult Delete([FromRoute]int movieId, int reviewId)
         {
-            return Ok(new { id = ID, name = "Review " + ID });
+            try
+            {
+                _reviewService.Delete(movieId, reviewId);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
     }
 }

@@ -38,9 +38,17 @@ namespace DemoApp
             // services.AddTransient() - Scope is limited to once per usage
             // services.AddSingleton() - Scope is till application running
 
-            services.AddScoped<IActorRepository, ActorRepository>();
-            services.AddScoped<IActorService, ActorService>();
-            
+            services.AddSingleton<IActorRepository, ActorRepository>();
+            services.AddSingleton<IActorService, ActorService>();
+            services.AddSingleton<IProducerRepository, ProducerRepository>();
+            services.AddSingleton<IProducerService, ProducerService>();
+            services.AddSingleton<IGenreRepository, GenreRepository>();
+            services.AddSingleton<IGenreService, GenreService>();
+            services.AddSingleton<IReviewRepository, ReviewRepository>();
+            services.AddSingleton<IReviewService, ReviewService>();
+            services.AddSingleton<IMovieRepository, MovieRepository>();
+            services.AddSingleton<IMovieService, MovieService>();
+
             services.AddControllers().AddNewtonsoftJson();
         }
 

@@ -13,7 +13,7 @@ namespace DemoApp.Test.MockResources
         /// </summary>
         public static readonly Mock<IActorRepository> ActorRepoMock = new Mock<IActorRepository>();
 
-        private static readonly IEnumerable<Actor> ListOfActors = new List<Actor>
+        private static readonly IList<Actor> ListOfActors = new List<Actor>
         {
             new Actor
             {
@@ -33,7 +33,7 @@ namespace DemoApp.Test.MockResources
 
         public static void MockGetAll()
         {
-            ActorRepoMock.Setup(x => x.GetAll()).Returns(ListOfActors);
+            ActorRepoMock.Setup(x => x.Get()).Returns(ListOfActors);
         }
     }
 }

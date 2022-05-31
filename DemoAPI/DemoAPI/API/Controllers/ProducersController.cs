@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DemoApp.Models;
+using DemoApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -6,42 +8,84 @@ namespace DemoApp.Controllers
     [Route("[controller]")]
     public class ProducersController : Controller
     {
+        private readonly IProducerService _producerService;
+
+        public ProducersController(IProducerService producerService)
+        {
+            _producerService = producerService;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(new
+            try
             {
-                id = 1,
-                name = "Producer 1"
-            });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int ID)
-        {
-            return Ok(new
+                return Ok(_producerService.Get());
+            }
+            catch (System.Exception)
             {
-                id = ID,
-                name = "Producer " + ID
-            });
+
+                return BadRequest();
+            }
         }
 
-        [HttpPost]
-        public IActionResult Add()
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
         {
-            return Created("~/producers/", new { id = 1, name = "Producer 1" });
+            try
+            {
+                return Ok(_producerService.Get(id));
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int ID)
+        [HttpPost("")]
+        public IActionResult Add(Producer producer)
         {
-            return Ok(new { id = ID, name = "Updated Producer " + ID });
+            try
+            {
+                _producerService.Create(producer);
+                return Created("~/producers/" + producer.Id, producer);
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int ID)
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, Producer producer)
         {
-            return Ok(new { id = ID, name = "Producer " + ID });
+            producer.Id = id;
+            try
+            {
+                _producerService.Update(producer);
+                return Ok(_producerService.Get(producer.Id));
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _producerService.Delete(id);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DemoApp.Services;
+﻿using DemoApp.Models;
+using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers
@@ -17,35 +18,74 @@ namespace DemoApp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_actorService.GetAll());
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int ID)
-        {
-            return Ok(new
+            try
             {
-                id = ID,
-                name = "Actor " + ID
-            });
+                return Ok(_actorService.Get());
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpPost]
-        public IActionResult Add()
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
         {
-            return Created("~/actors/", new { id = 1, name = "Actor 1" });
+            try
+            {
+                return Ok(_actorService.Get(id));
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int ID)
+        [HttpPost("")]
+        public IActionResult Add(Actor actor)
         {
-            return Ok(new { id = ID, name = "Updated Actor " + ID });
+            try
+            {
+                _actorService.Create(actor);
+                return Created("~/actors/" + actor.Id, actor);
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int ID) 
-        { 
-            return Ok(new { id = ID, name = "Actor " + ID });
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id,Actor actor)
+        {
+            actor.Id = id;
+            try
+            {
+                _actorService.Update(actor);
+                return Ok(_actorService.Get(actor.Id));
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id) 
+        {
+            try
+            {
+                _actorService.Delete(id);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
     }
 }

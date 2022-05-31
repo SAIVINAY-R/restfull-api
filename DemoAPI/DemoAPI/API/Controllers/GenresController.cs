@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DemoApp.Models;
+using DemoApp.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -6,42 +8,84 @@ namespace DemoApp.Controllers
     [Route("[controller]")]
     public class GenresController : Controller
     {
+        private readonly IGenreService _genreService;
+
+        public GenresController(IGenreService genreService)
+        {
+            _genreService = genreService;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(new
+            try
             {
-                id = 1,
-                name = "Genre 1"
-            });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int ID)
-        {
-            return Ok(new
+                return Ok(_genreService.Get());
+            }
+            catch (System.Exception)
             {
-                id = ID,
-                name = "Genre " + ID
-            });
+
+                return BadRequest();
+            }
         }
 
-        [HttpPost]
-        public IActionResult Add()
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
         {
-            return Created("~/genres/", new { id = 1, name = "Genre 1" });
+            try
+            {
+                return Ok(_genreService.Get(id));
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int ID)
+        [HttpPost("")]
+        public IActionResult Add(Genre genre)
         {
-            return Ok(new { id = ID, name = "Updated Genre " + ID });
+            try
+            {
+                _genreService.Create(genre);
+                return Created("~/genres/" + genre.Id, genre);
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int ID)
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, Genre genre)
         {
-            return Ok(new { id = ID, name = "Genre " + ID });
+            genre.Id = id;
+            try
+            {
+                _genreService.Update(genre);
+                return Ok(_genreService.Get(genre.Id));
+            }
+            catch (System.Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _genreService.Delete(id);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+
+                return NotFound();
+            }
         }
     }
 }
