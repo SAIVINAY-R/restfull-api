@@ -16,17 +16,28 @@ namespace DemoApp.Services
         {
             if (producer == null)
                 throw new ArgumentNullException();
-            if (
-                string.IsNullOrWhiteSpace(producer.Name) ||
-                string.IsNullOrWhiteSpace(producer.Bio) ||
-                string.IsNullOrWhiteSpace(producer.Gender)
-                )
-                throw new ArgumentException();
+            if (string.IsNullOrWhiteSpace(producer.Name))
+                throw new Exception("Producer name is empty");
+
+            if (string.IsNullOrWhiteSpace(producer.Bio))
+                throw new Exception("Producer Bio is empty");
+
+            if (string.IsNullOrWhiteSpace(producer.Gender))
+                throw new Exception("Provide Producer Gender");
+
+            var producers = (List<Producer>)_producerRepository.Get();
+            if (producers.Exists(p => p.Id == producer.Id))
+                throw new Exception("Producer already exists");
+
             _producerRepository.Create(producer);
         }
 
         public void Delete(int id)
         {
+            var producer = _producerRepository.Get(id);
+            if (default(Producer) == producer)
+                throw new Exception("Producer not found");
+
             _producerRepository.Delete(id);
         }
 
@@ -37,11 +48,19 @@ namespace DemoApp.Services
 
         public Producer Get(int id)
         {
-            return _producerRepository.Get(id);
+            var producer = _producerRepository.Get(id);
+            if (default(Producer) == producer)
+                throw new Exception("Producer not found");
+
+            return producer;
         }
 
         public void Update(Producer producer)
         {
+            var oldProducer = _producerRepository.Get(producer.Id);
+            if (default(Producer) == oldProducer)
+                throw new Exception("Producer not found");
+
             _producerRepository.Update(producer);
         }
     }

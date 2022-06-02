@@ -19,14 +19,24 @@ namespace DemoApp.Services
             if (review == null)
                 throw new ArgumentNullException();
             if (string.IsNullOrWhiteSpace(review.Message))
-                throw new ArgumentException();
-            //Below line checks wheater the movie with review.MovieId is present or not If not present throws an Exception
-            _movieRepository.Get(review.MovieId);
+                throw new Exception("Message is empty");
+
+            var movies = (List<Movie>)_movieRepository.Get();
+            if (!(movies.Exists(movie => movie.Id == review.MovieId)))
+                throw new Exception("Movie not found");
+
+            var reviews = (List<Review>)_reviewRepository.Get(review.MovieId);
+            if (reviews.Exists(r => r.Id == review.Id && r.MovieId == review.MovieId))
+                throw new Exception("Review already exists");
+
             _reviewRepository.Create(review);
         }
 
         public void Delete(int movieId, int reviewId)
         {
+            var reviews = (List<Review>)_reviewRepository.Get(movieId);
+            if (!(reviews.Exists(review => review.Id == reviewId)))
+                throw new Exception("Review not found");
             _reviewRepository.Delete(movieId, reviewId);
         }
 
@@ -35,18 +45,24 @@ namespace DemoApp.Services
             var reviews = _reviewRepository.Get(movieId);
             if (reviews.Count == 0)
             {
-                throw new Exception();
+                throw new Exception("No reviews with the movie Id");
             }
             return reviews;
         }
 
         public Review Get(int movieId, int reviewId)
         {
-           return _reviewRepository.Get(movieId, reviewId);   
+            var reviews = (List<Review>)_reviewRepository.Get(movieId);
+            if (!(reviews.Exists(review => review.Id == reviewId)))
+                throw new Exception("Review not found");
+            return _reviewRepository.Get(movieId, reviewId);   
         }
 
         public void Update(Review review)
         {
+            var reviews = (List<Review>)_reviewRepository.Get(review.MovieId);
+            if (!(reviews.Exists(r => r.Id == review.Id)))
+                throw new Exception("Review not found");
             _reviewRepository.Update(review);
         }
     }

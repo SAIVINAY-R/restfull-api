@@ -16,7 +16,7 @@ namespace DemoApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromRoute]int movieId)
+        public IActionResult Get(int movieId)
         {
             try
              {
@@ -30,7 +30,7 @@ namespace DemoApp.Controllers
         }
 
         [HttpGet("{reviewId:int}")]
-        public IActionResult Get([FromRoute]int movieId, int reviewId)
+        public IActionResult Get(int movieId, int reviewId)
         {
             try
             {
@@ -43,8 +43,8 @@ namespace DemoApp.Controllers
             }
         }
 
-        [HttpPost("")]
-        public IActionResult Add([FromRoute]int movieID,Review review)
+        [HttpPost]
+        public IActionResult Add(int movieID,Review review)
         {
             review.MovieId = movieID;
             try
@@ -60,7 +60,7 @@ namespace DemoApp.Controllers
         }
 
         [HttpPut("{reviewId:int}")]
-        public IActionResult Update([FromRoute] int movieId, [FromRoute] int reviewId, Review review)
+        public IActionResult Update(int movieId, int reviewId, Review review)
         {
             review.MovieId = movieId;
             review.Id = reviewId;
@@ -76,7 +76,7 @@ namespace DemoApp.Controllers
         }
 
         [HttpDelete("{reviewId:int}")]
-        public IActionResult Delete([FromRoute]int movieId, int reviewId)
+        public IActionResult Delete(int movieId, int reviewId)
         {
             try
             {

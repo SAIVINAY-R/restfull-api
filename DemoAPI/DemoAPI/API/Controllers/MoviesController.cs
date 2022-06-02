@@ -43,7 +43,7 @@ namespace DemoApp.Controllers
             }
         }
 
-        [HttpPost("")]
+        [HttpPost]
         public IActionResult Add(Movie movie)
         {
             try

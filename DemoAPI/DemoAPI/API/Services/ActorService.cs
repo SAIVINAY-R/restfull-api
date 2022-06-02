@@ -18,17 +18,28 @@ namespace DemoApp.Services
         {
             if (actor == null)
                 throw new ArgumentNullException();
-            if (
-                string.IsNullOrWhiteSpace(actor.Name) ||
-                string.IsNullOrWhiteSpace(actor.Bio) ||
-                string.IsNullOrWhiteSpace(actor.Gender)
-                )
-                throw new ArgumentException();
+
+            if (string.IsNullOrWhiteSpace(actor.Name))
+                throw new Exception("Actor name is empty");
+
+            if (string.IsNullOrWhiteSpace(actor.Bio))
+                throw new Exception("Actor Bio is empty");
+
+            if (string.IsNullOrWhiteSpace(actor.Gender))
+                throw new Exception("Provide Actor Gender");
+
+            var actors = (List<Actor>)_actorRepository.Get();
+            if (actors.Exists(a => a.Id == actor.Id))
+                throw new Exception("Actor already exists");
+
             _actorRepository.Create(actor);
         }
 
         public void Delete(int id)
         {
+            var actor = _actorRepository.Get(id);
+            if (default(Actor) == actor)
+                throw new Exception("Actor not found");
             _actorRepository.Delete(id);
         }
 
@@ -39,11 +50,17 @@ namespace DemoApp.Services
 
         public Actor Get(int id)
         {
-            return _actorRepository.Get(id);
+            var actor = _actorRepository.Get(id);
+            if (default(Actor) == actor)
+                throw new Exception("Actor not found");
+            return actor;
         }
 
         public void Update(Actor actor)
         {
+            var oldActor = _actorRepository.Get(actor.Id);
+            if (default(Actor) == oldActor)
+                throw new Exception("Actor not found");
             _actorRepository.Update(actor);
         }
     }
