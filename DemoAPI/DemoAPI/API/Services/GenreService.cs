@@ -50,6 +50,9 @@ namespace DemoApp.Services
 
         public void Update(Genre genre)
         {
+            if (genre == null)
+                throw new ArgumentNullException();
+
             var oldGenre = _genreRepository.Get(genre.Id);
             if (default(Genre) == oldGenre)
                 throw new Exception("Genre not found");

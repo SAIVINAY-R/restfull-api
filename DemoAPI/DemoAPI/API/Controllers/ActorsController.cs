@@ -59,13 +59,16 @@ namespace DemoApp.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Update(int id,Actor actor)
+        public IActionResult Update(Actor actor)
         {
-            actor.Id = id;
             try
             {
                 _actorService.Update(actor);
                 return Ok(_actorService.Get(actor.Id));
+            }
+            catch (System.ArgumentNullException)
+            {
+                return BadRequest();
             }
             catch (System.Exception)
             {

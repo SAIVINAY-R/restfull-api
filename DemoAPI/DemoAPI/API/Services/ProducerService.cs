@@ -57,6 +57,9 @@ namespace DemoApp.Services
 
         public void Update(Producer producer)
         {
+            if (producer == null)
+                throw new ArgumentNullException();
+
             var oldProducer = _producerRepository.Get(producer.Id);
             if (default(Producer) == oldProducer)
                 throw new Exception("Producer not found");

@@ -58,9 +58,13 @@ namespace DemoApp.Services
 
         public void Update(Actor actor)
         {
+            if (actor == null)
+                throw new ArgumentNullException();
+
             var oldActor = _actorRepository.Get(actor.Id);
             if (default(Actor) == oldActor)
                 throw new Exception("Actor not found");
+
             _actorRepository.Update(actor);
         }
     }

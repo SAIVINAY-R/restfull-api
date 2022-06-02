@@ -81,9 +81,13 @@ namespace DemoApp.Services
 
         public void Update(Movie movie)
         {
+            if (movie == null)
+                throw new ArgumentNullException();
+
             var oldMovie = _movieRepository.Get(movie.Id);
             if (default(Movie) == oldMovie)
                 throw new Exception("Movie not in the list");
+
             _movieRepository.Update(movie);
         }
     }

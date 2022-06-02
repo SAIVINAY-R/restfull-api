@@ -19,12 +19,11 @@ namespace DemoApp.Controllers
         public IActionResult Get(int movieId)
         {
             try
-             {
+            {
                 return Ok(_reviewService.Get(movieId));
             }
             catch (System.Exception)
-            {
-
+            { 
                 return NotFound(); 
             }
         }
@@ -60,14 +59,16 @@ namespace DemoApp.Controllers
         }
 
         [HttpPut("{reviewId:int}")]
-        public IActionResult Update(int movieId, int reviewId, Review review)
+        public IActionResult Update(Review review)
         {
-            review.MovieId = movieId;
-            review.Id = reviewId;
             try
             {
                 _reviewService.Update(review);
                 return Ok(_reviewService.Get(review.MovieId,review.Id));
+            }
+            catch (System.ArgumentNullException)
+            {
+                return BadRequest();
             }
             catch (System.Exception)
             {

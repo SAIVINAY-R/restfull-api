@@ -60,9 +60,13 @@ namespace DemoApp.Services
 
         public void Update(Review review)
         {
+            if (review == null)
+                throw new ArgumentNullException();
+
             var reviews = (List<Review>)_reviewRepository.Get(review.MovieId);
             if (!(reviews.Exists(r => r.Id == review.Id)))
                 throw new Exception("Review not found");
+
             _reviewRepository.Update(review);
         }
     }
