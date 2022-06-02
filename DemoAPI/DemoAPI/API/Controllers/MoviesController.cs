@@ -1,6 +1,7 @@
 ﻿using DemoApp.Models;
 using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DemoApp.Controllers
 {
@@ -22,10 +23,10 @@ namespace DemoApp.Controllers
             {
                 return Ok(_movieService.Get());
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
 
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -36,7 +37,7 @@ namespace DemoApp.Controllers
             {
                 return Ok(_movieService.Get(id));
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();
@@ -51,10 +52,10 @@ namespace DemoApp.Controllers
                 _movieService.Create(movie);
                 return Created("~/actors/" + movie.Id, movie);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
 
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -66,11 +67,11 @@ namespace DemoApp.Controllers
                 _movieService.Update(movie);
                 return Ok(_movieService.Get(movie.Id));
             }
-            catch (System.ArgumentNullException)
+            catch (ArgumentNullException e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -84,7 +85,7 @@ namespace DemoApp.Controllers
                 _movieService.Delete(id);
                 return Ok();
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();

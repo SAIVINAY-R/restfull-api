@@ -1,6 +1,7 @@
 ﻿using DemoApp.Models;
 using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DemoApp.Controllers
 {
@@ -22,10 +23,10 @@ namespace DemoApp.Controllers
             {
                 return Ok(_genreService.Get());
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
 
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -36,7 +37,7 @@ namespace DemoApp.Controllers
             {
                 return Ok(_genreService.Get(id));
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();
@@ -51,10 +52,10 @@ namespace DemoApp.Controllers
                 _genreService.Create(genre);
                 return Created("~/genres/" + genre.Id, genre);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
 
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -66,11 +67,11 @@ namespace DemoApp.Controllers
                 _genreService.Update(genre);
                 return Ok(_genreService.Get(genre.Id));
             }
-            catch (System.ArgumentNullException)
+            catch (ArgumentNullException e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -84,7 +85,7 @@ namespace DemoApp.Controllers
                 _genreService.Delete(id);
                 return Ok();
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();

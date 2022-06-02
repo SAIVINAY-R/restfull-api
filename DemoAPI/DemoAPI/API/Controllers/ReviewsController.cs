@@ -1,6 +1,7 @@
 ﻿using DemoApp.Models;
 using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DemoApp.Controllers
 {
@@ -22,7 +23,7 @@ namespace DemoApp.Controllers
             {
                 return Ok(_reviewService.Get(movieId));
             }
-            catch (System.Exception)
+            catch(Exception)
             { 
                 return NotFound(); 
             }
@@ -35,7 +36,7 @@ namespace DemoApp.Controllers
             {
                 return Ok(_reviewService.Get(movieId, reviewId));
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();
@@ -51,10 +52,10 @@ namespace DemoApp.Controllers
                 _reviewService.Create(review);
                 return Created("~/reviews/" + review.Id, review);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
 
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -66,11 +67,11 @@ namespace DemoApp.Controllers
                 _reviewService.Update(review);
                 return Ok(_reviewService.Get(review.MovieId,review.Id));
             }
-            catch (System.ArgumentNullException)
+            catch (ArgumentNullException e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -84,7 +85,7 @@ namespace DemoApp.Controllers
                 _reviewService.Delete(movieId, reviewId);
                 return Ok();
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 return NotFound();
