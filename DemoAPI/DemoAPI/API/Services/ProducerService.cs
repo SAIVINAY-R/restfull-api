@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DemoApp.CustomeExceptions;
 using DemoApp.Models;
 using DemoApp.Repository;
 
@@ -17,26 +18,21 @@ namespace DemoApp.Services
             if (producer == null)
                 throw new ArgumentNullException();
             if (string.IsNullOrWhiteSpace(producer.Name))
-                throw new Exception("Producer name is empty");
+                throw new ArgumentException("Producer name is empty");
 
             if (string.IsNullOrWhiteSpace(producer.Bio))
-                throw new Exception("Producer Bio is empty");
+                throw new ArgumentException("Producer Bio is empty");
 
-            if (string.IsNullOrWhiteSpace(producer.Gender))
-                throw new Exception("Provide Producer Gender");
-
-            var producers = (List<Producer>)_producerRepository.Get();
-            if (producers.Exists(p => p.Id == producer.Id))
-                throw new Exception("Producer already exists");
+            if (_producerRepository.Get(producer.Id) != null)
+                throw new EntityAlreadyExistException("Producer already exists");
 
             _producerRepository.Create(producer);
         }
 
         public void Delete(int id)
         {
-            var producer = _producerRepository.Get(id);
-            if (default(Producer) == producer)
-                throw new Exception("Producer not found");
+            if (_producerRepository.Get(id) == null)
+                throw new KeyNotFoundException("Producer not found");
 
             _producerRepository.Delete(id);
         }
@@ -49,8 +45,8 @@ namespace DemoApp.Services
         public Producer Get(int id)
         {
             var producer = _producerRepository.Get(id);
-            if (default(Producer) == producer)
-                throw new Exception("Producer not found");
+            if (producer == null)
+                throw new KeyNotFoundException("Producer not found");
 
             return producer;
         }
@@ -60,9 +56,8 @@ namespace DemoApp.Services
             if (producer == null)
                 throw new ArgumentNullException();
 
-            var oldProducer = _producerRepository.Get(producer.Id);
-            if (default(Producer) == oldProducer)
-                throw new Exception("Producer not found");
+            if (_producerRepository.Get(producer.Id) == null)
+                throw new KeyNotFoundException("Producer not found");
 
             _producerRepository.Update(producer);
         }

@@ -23,9 +23,9 @@ namespace DemoApp.Controllers
             {
                 return Ok(_reviewService.Get(movieId));
             }
-            catch(Exception)
+            catch(Exception e)
             { 
-                return NotFound(); 
+                return NotFound(e.Message); 
             }
         }
 
@@ -36,17 +36,16 @@ namespace DemoApp.Controllers
             {
                 return Ok(_reviewService.Get(movieId, reviewId));
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 
         [HttpPost]
-        public IActionResult Add(int movieID,Review review)
+        public IActionResult Add(Review review)
         {
-            review.MovieId = movieID;
             try
             {
                 _reviewService.Create(review);
@@ -71,9 +70,9 @@ namespace DemoApp.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DemoApp.Models
 {
@@ -11,6 +12,6 @@ namespace DemoApp.Models
         public List<int> ActorIds { get; set; }
         public List<int> Genres { get; set; }
         public int ProducerId { get; set; }
-        public string CoverImage { get; set; }
+        public Uri CoverImage { get; set; }
     }
 }

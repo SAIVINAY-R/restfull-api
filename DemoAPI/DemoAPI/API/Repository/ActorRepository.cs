@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DemoApp.Models;
 
 namespace DemoApp.Repository
@@ -7,15 +6,34 @@ namespace DemoApp.Repository
     public class ActorRepository : IActorRepository
     {
         private List<Actor> _actors;
-        public ActorRepository() => _actors = new List<Actor>();
-        public void Create(Actor actor) => _actors.Add(actor);
+        public ActorRepository()
+        {
+            _actors = new List<Actor>();
+        }
 
-        public void Delete(int id) => _actors.Remove(_actors.Find(actor => actor.Id == id));
+        public void Create(Actor actor)
+        {
+            _actors.Add(actor);
+        }
 
-        public IList<Actor> Get() => _actors;
+        public void Delete(int id)
+        {
+            _actors.Remove(_actors.Find(actor => actor.Id == id));
+        }
 
-        public Actor Get(int id) => _actors.Find(actor => actor.Id == id);
+        public IList<Actor> Get()
+        {
+            return _actors;
+        }
 
-        public void Update(Actor actor) => _actors[_actors.FindIndex(a => a.Id == actor.Id)] = actor;
+        public Actor Get(int id)
+        {
+            return _actors.Find(actor => actor.Id == id);
+        }
+
+        public void Update(Actor actor)
+        {
+            _actors[_actors.FindIndex(a => a.Id == actor.Id)] = actor;
+        }
     }
 }

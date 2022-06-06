@@ -7,15 +7,34 @@ namespace DemoApp.Repository
     public class MovieRepository : IMovieRepository
     {
         private List<Movie> _movies;
-        public MovieRepository() => _movies = new List<Movie>();
-        public void Create(Movie movie) => _movies.Add(movie);
+        public MovieRepository()
+        {
+            _movies = new List<Movie>();
+        }
 
-        public void Delete(int id) => _movies.Remove(_movies.Find(movie => movie.Id == id));
+        public void Create(Movie movie)
+        {
+            _movies.Add(movie);
+        }
 
-        public IList<Movie> Get() => _movies;
+        public void Delete(int id)
+        {
+            _movies.Remove(_movies.Find(movie => movie.Id == id));
+        }
 
-        public Movie Get(int id) => _movies.Find(movie => movie.Id == id);
+        public IList<Movie> Get()
+        {
+            return _movies;
+        }
 
-        public void Update(Movie movie) => _movies[_movies.FindIndex(m => m.Id == movie.Id)] = movie;
+        public Movie Get(int id)
+        {
+            return _movies.Find(movie => movie.Id == id);
+        }
+
+        public void Update(Movie movie)
+        {
+            _movies[_movies.FindIndex(m => m.Id == movie.Id)] = movie;
+        }
     }
 }

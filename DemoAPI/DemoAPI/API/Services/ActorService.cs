@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DemoApp.CustomeExceptions;
 using DemoApp.Models;
 using DemoApp.Repository;
 
@@ -20,26 +21,21 @@ namespace DemoApp.Services
                 throw new ArgumentNullException();
 
             if (string.IsNullOrWhiteSpace(actor.Name))
-                throw new Exception("Actor name is empty");
+                throw new ArgumentException("Actor name is empty");
 
             if (string.IsNullOrWhiteSpace(actor.Bio))
-                throw new Exception("Actor Bio is empty");
+                throw new ArgumentException("Actor Bio is empty");
 
-            if (string.IsNullOrWhiteSpace(actor.Gender))
-                throw new Exception("Provide Actor Gender");
-
-            var actors = (List<Actor>)_actorRepository.Get();
-            if (actors.Exists(a => a.Id == actor.Id))
-                throw new Exception("Actor already exists");
+            if(_actorRepository.Get(actor.Id) != null)
+                throw new EntityAlreadyExistException("Actor already exists");
 
             _actorRepository.Create(actor);
         }
 
         public void Delete(int id)
         {
-            var actor = _actorRepository.Get(id);
-            if (default(Actor) == actor)
-                throw new Exception("Actor not found");
+            if (_actorRepository.Get(id) == null)
+                throw new KeyNotFoundException("Actor not found");
             _actorRepository.Delete(id);
         }
 
@@ -51,8 +47,8 @@ namespace DemoApp.Services
         public Actor Get(int id)
         {
             var actor = _actorRepository.Get(id);
-            if (default(Actor) == actor)
-                throw new Exception("Actor not found");
+            if (actor == null)
+                throw new KeyNotFoundException("Actor not found");
             return actor;
         }
 
@@ -61,9 +57,8 @@ namespace DemoApp.Services
             if (actor == null)
                 throw new ArgumentNullException();
 
-            var oldActor = _actorRepository.Get(actor.Id);
-            if (default(Actor) == oldActor)
-                throw new Exception("Actor not found");
+            if (_actorRepository.Get(actor.Id) == null)
+                throw new KeyNotFoundException("Actor not found");
 
             _actorRepository.Update(actor);
         }
