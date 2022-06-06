@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DemoApp.Models
+﻿namespace DemoApp.Models
 {
     public class Producer : Person
     {
