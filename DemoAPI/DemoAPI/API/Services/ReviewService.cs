@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoApp.CustomeExceptions;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 using DemoApp.Repository;
 
 namespace DemoApp.Services
@@ -38,7 +38,7 @@ namespace DemoApp.Services
             _reviewRepository.Delete(movieId, reviewId);
         }
 
-        public IList<Review> Get(int movieId)
+        public IList<ResponseModels.Review> Get(int movieId)
         {
             var reviews = _reviewRepository.Get(movieId);
             if (reviews.Count == 0)
@@ -48,7 +48,7 @@ namespace DemoApp.Services
             return reviews;
         }
 
-        public Review Get(int movieId, int reviewId)
+        public ResponseModels.Review Get(int movieId, int reviewId)
         {
             var review = _reviewRepository.Get(movieId, reviewId);
             if (review == null)

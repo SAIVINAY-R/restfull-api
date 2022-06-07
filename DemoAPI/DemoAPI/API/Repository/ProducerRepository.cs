@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 
 namespace DemoApp.Repository
 {
     public class ProducerRepository : IProducerRepository
     {
-        private List<Producer> _producers;
+        private List<DBModels.Producer> _producers;
         public ProducerRepository()
         {
-            _producers = new List<Producer>();
+            _producers = new List<DBModels.Producer>();
         }
 
         public void Create(Producer producer)
         {
-            _producers.Add(producer);
+            _producers.Add(new DBModels.Producer
+            {
+                Id = producer.Id,
+                Name = producer.Name,
+                DOB = producer.DOB,
+                Bio = producer.Bio,
+                Gender = producer.Gender
+            });
         }
 
         public void Delete(int id)
@@ -22,19 +29,46 @@ namespace DemoApp.Repository
             _producers.Remove(_producers.Find(producer => producer.Id == id));
         }
 
-        public IList<Producer> Get()
+        public IList<ResponseModels.Producer> Get()
         {
-            return _producers;
+            var producers = new List<ResponseModels.Producer>();
+            foreach (var producer in _producers)
+                producers.Add(new ResponseModels.Producer
+                {
+                    Id = producer.Id,
+                    Name = producer.Name,
+                    DOB = producer.DOB,
+                    Bio = producer.Bio,
+                    Gender = producer.Gender
+                });
+            return producers;
         }
 
-        public Producer Get(int id)
+        public ResponseModels.Producer Get(int id)
         {
-            return _producers.Find(producer => producer.Id == id);
+            var producer = _producers.Find(p => p.Id == id);
+            if (producer == null)
+                return default(ResponseModels.Producer);
+            return new ResponseModels.Producer
+            {
+                Id = producer.Id,
+                Name = producer.Name,
+                DOB = producer.DOB,
+                Bio = producer.Bio,
+                Gender = producer.Gender
+            };
         }
 
         public void Update(Producer producer)
         {
-            _producers[_producers.FindIndex(p => p.Id == producer.Id)] = producer;
+            _producers[_producers.FindIndex(p => p.Id == producer.Id)] = new DBModels.Producer
+            {
+                Id = producer.Id,
+                Name = producer.Name,
+                DOB = producer.DOB,
+                Bio = producer.Bio,
+                Gender = producer.Gender
+            };
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoApp.CustomeExceptions;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 using DemoApp.Repository;
 
 namespace DemoApp.Services
@@ -39,12 +39,12 @@ namespace DemoApp.Services
             _actorRepository.Delete(id);
         }
 
-        public IList<Actor> Get()
+        public IList<ResponseModels.Actor> Get()
         {
             return _actorRepository.Get();
         }
 
-        public Actor Get(int id)
+        public ResponseModels.Actor Get(int id)
         {
             var actor = _actorRepository.Get(id);
             if (actor == null)

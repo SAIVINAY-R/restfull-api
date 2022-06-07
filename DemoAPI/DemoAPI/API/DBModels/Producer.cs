@@ -1,4 +1,4 @@
-﻿using DemoApp.Models;
+﻿using DemoApp.RequestModels;
 
 namespace DemoApp.DBModels
 {

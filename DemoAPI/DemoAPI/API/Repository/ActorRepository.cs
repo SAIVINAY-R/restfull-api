@@ -1,19 +1,26 @@
 ﻿using System.Collections.Generic;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 
 namespace DemoApp.Repository
 {
     public class ActorRepository : IActorRepository
     {
-        private List<Actor> _actors;
+        private List<DBModels.Actor> _actors;
         public ActorRepository()
         {
-            _actors = new List<Actor>();
+            _actors = new List<DBModels.Actor>();
         }
 
         public void Create(Actor actor)
         {
-            _actors.Add(actor);
+            _actors.Add(new DBModels.Actor
+            {
+                Id = actor.Id,
+                Name = actor.Name,
+                DOB = actor.DOB,
+                Bio = actor.Bio,
+                Gender = actor.Gender
+            });
         }
 
         public void Delete(int id)
@@ -21,19 +28,46 @@ namespace DemoApp.Repository
             _actors.Remove(_actors.Find(actor => actor.Id == id));
         }
 
-        public IList<Actor> Get()
+        public IList<ResponseModels.Actor> Get()
         {
-            return _actors;
+            var actors = new List<ResponseModels.Actor>();
+            foreach (var actor in _actors)
+                actors.Add(new ResponseModels.Actor
+                {
+                    Id = actor.Id,
+                    Name = actor.Name,
+                    DOB = actor.DOB,
+                    Bio = actor.Bio,
+                    Gender = actor.Gender
+                });
+            return actors;
         }
 
-        public Actor Get(int id)
+        public ResponseModels.Actor Get(int id)
         {
-            return _actors.Find(actor => actor.Id == id);
+            var actor = _actors.Find(a => a.Id == id);
+            if (actor == null)
+                return default(ResponseModels.Actor);
+            return new ResponseModels.Actor
+            {
+                Id = actor.Id,
+                Name = actor.Name,
+                DOB = actor.DOB,
+                Bio = actor.Bio,
+                Gender = actor.Gender
+            };
         }
 
         public void Update(Actor actor)
         {
-            _actors[_actors.FindIndex(a => a.Id == actor.Id)] = actor;
+            _actors[_actors.FindIndex(a => a.Id == actor.Id)] = new DBModels.Actor
+            {
+                Id=actor.Id,
+                Name = actor.Name,
+                DOB = actor.DOB,
+                Bio = actor.Bio,
+                Gender = actor.Gender
+            };
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using DemoApp.Models;
+﻿using DemoApp.RequestModels;
 using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -37,10 +37,10 @@ namespace DemoApp.Controllers
             {
                 return Ok(_movieService.Get(id));
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 
@@ -71,9 +71,9 @@ namespace DemoApp.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 
@@ -83,12 +83,12 @@ namespace DemoApp.Controllers
             try
             {
                 _movieService.Delete(id);
-                return Ok();
+                return Ok("Sucessfully Deleted");
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
     }

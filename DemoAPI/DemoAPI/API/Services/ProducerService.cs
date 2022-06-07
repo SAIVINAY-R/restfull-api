@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoApp.CustomeExceptions;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 using DemoApp.Repository;
 
 namespace DemoApp.Services
@@ -37,12 +37,12 @@ namespace DemoApp.Services
             _producerRepository.Delete(id);
         }
 
-        public IList<Producer> Get()
+        public IList<ResponseModels.Producer> Get()
         {
             return _producerRepository.Get();
         }
 
-        public Producer Get(int id)
+        public ResponseModels.Producer Get(int id)
         {
             var producer = _producerRepository.Get(id);
             if (producer == null)

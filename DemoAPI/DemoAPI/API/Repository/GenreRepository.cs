@@ -1,40 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 
 namespace DemoApp.Repository
 {
     public class GenreRepository : IGenreRepository
     {
-        private List<Genre> _genres;
+        private List<DBModels.Genre> _genres;
         public GenreRepository()
         {
-            _genres = new List<Genre>();
+            _genres = new List<DBModels.Genre>();
         }
 
         public void Create(Genre genre)
         {
-            _genres.Add(genre);
+            _genres.Add(new DBModels.Genre
+            {
+                Id = genre.Id,
+                Name = genre.Name,
+            });
         }
 
         public void Delete(int id)
         {
-            _genres.Remove(_genres.Find(genre => genre.Id == id));
+            _genres.Remove(_genres.Find(g => g.Id == id));
         }
 
-        public IList<Genre> Get()
+        public IList<ResponseModels.Genre> Get()
         {
-            return _genres;
+            var genres = new List<ResponseModels.Genre>();
+            foreach (var genre in _genres)
+                genres.Add(new ResponseModels.Genre
+                {
+                    Id = genre.Id,
+                    Name = genre.Name
+                });
+            return genres;
         }
 
-        public Genre Get(int id)
+        public ResponseModels.Genre Get(int id)
         {
-            return _genres.Find(genre => genre.Id == id);
+            var genre = _genres.Find(genre => genre.Id == id);
+            if (genre == null)
+                return default(ResponseModels.Genre);
+            return new ResponseModels.Genre
+            {
+                Id = genre.Id,
+                Name = genre.Name
+            };
         }
 
         public void Update(Genre genre)
         {
-            _genres[_genres.FindIndex(g => g.Id == genre.Id)] = genre;
+            _genres[_genres.FindIndex(g => g.Id == genre.Id)] = new DBModels.Genre
+            {
+                Id = genre.Id,
+                Name = genre.Name
+            };
         }
     }
 }

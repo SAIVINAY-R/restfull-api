@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DemoApp.Models
+namespace DemoApp.RequestModels
 {
     public class Movie
     {

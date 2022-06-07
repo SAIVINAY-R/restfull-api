@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoApp.CustomeExceptions;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 using DemoApp.Repository;
 
 namespace DemoApp.Services
@@ -60,12 +60,12 @@ namespace DemoApp.Services
             _movieRepository.Delete(id);
         }
 
-        public IList<Movie> Get()
+        public IList<ResponseModels.Movie> Get()
         {
             return _movieRepository.Get();
         }
 
-        public Movie Get(int id)
+        public ResponseModels.Movie Get(int id)
         {
             var movie = _movieRepository.Get(id);
             if (movie == null)

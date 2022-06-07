@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoApp.CustomeExceptions;
-using DemoApp.Models;
+using DemoApp.RequestModels;
 using DemoApp.Repository;
 
 namespace DemoApp.Services
@@ -34,12 +34,12 @@ namespace DemoApp.Services
             _genreRepository.Delete(id);
         }
 
-        public IList<Genre> Get()
+        public IList<ResponseModels.Genre> Get()
         {
             return _genreRepository.Get();
         }
 
-        public Genre Get(int id)
+        public ResponseModels.Genre Get(int id)
         {
             var genre = _genreRepository.Get(id);
             if (genre == null)

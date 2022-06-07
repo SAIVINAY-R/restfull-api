@@ -1,4 +1,4 @@
-﻿using DemoApp.Models;
+﻿using DemoApp.RequestModels;
 using DemoApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -82,12 +82,12 @@ namespace DemoApp.Controllers
             try
             {
                 _reviewService.Delete(movieId, reviewId);
-                return Ok();
+                return Ok("Sucessfully Deleted");
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
     }
